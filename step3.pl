@@ -3,14 +3,13 @@
 	# Print From Anywhere for Mac, print queue setup.  For use by SUNY Stony Brook Students
 	# Service provided by Desktop & Systems Engineering 
 	# This version by Shaun Kepert, original v1.0 by Andrew Johnson
-	# Last Edit: 04/26/2021
+	# Last Edit: 02/12/2022
 	
 use strict;
 use warnings;
 
 my $version = "v3.3.12";
 my $OSversion = 1;
-#my $self = getlogin();
 my $logpath = "/Library/Logs/SINC_PFAclient.log";
 my $date = `/bin/date`;
 my $OSmin = 7;
@@ -20,42 +19,43 @@ open(my $log, '>', $logpath) or die "Can't open $logpath";
 my $pharosPath = "/Library/Application Support/Pharos/Popup.app";
 my $xeroxPath = "/Library/Printers/PPDs/Contents/Resources/Xerox Phaser 7800DN.gz";
 my $pharosLS = `/bin/ls -l '/Library/Application Support/Pharos' 2>&1`;
-my $xeroxLS = `/bin/ls -l '/Library/Printers/PPDs/Contents/Resources/' | grep 'Xerox Phaser 7800' 2>&1`;
+my $xeroxLS = `/bin/ls -l '/Library/Printers/PPDs/Contents/Resources/Xerox\ Phaser\ 7*' 2>&1`;
 
 print $log "\nStarting $0 - $version\n";
 print $log "$date\n";
 print $log "Print From Anywhere $version, Provided by Desktop and Systems Engineering\n";
 print $log "This script requires the Pharos Popup software and Xerox print drivers to be installed FIRST.\n\n";
 
-	# OS Version check
+	# OS Version check - removed, only report the OS to the log
 	
 $OSversion=`/usr/bin/defaults read /System/Library/CoreServices/SystemVersion ProductVersion`;
 print $log "My OS version: $OSversion";
-$OSversion=`/usr/bin/defaults read /System/Library/CoreServices/SystemVersion ProductVersion | /usr/bin/cut -c 1,2`;
-chomp $OSversion;
+
+# $OSversion=`/usr/bin/defaults read /System/Library/CoreServices/SystemVersion ProductVersion | /usr/bin/cut -c 1,2`;
+# chomp $OSversion;
 
 	# Are you on Big Sur?  Thanks Apple...
-if ( $OSversion == 10 ) {
-	# adjust variable for pre Big Sur MacOS X version numbering system
-	$OSversion=`/usr/bin/defaults read /System/Library/CoreServices/SystemVersion ProductVersion | /usr/bin/cut -d \".\" -f 2`;
-	chomp $OSversion;
-}
-else {
-	# adjust variable for new post Big Sur version numbering system, treat 11.0 as 10.16
-	$OSversion=`/usr/bin/defaults read /System/Library/CoreServices/SystemVersion ProductVersion | /usr/bin/cut -d \".\" -f 2`;
-	chomp $OSversion;
-	$OSversion = $OSversion + 16;
-}
+# if ( $OSversion == 10 ) {
+#	# adjust variable for pre Big Sur MacOS X version numbering system
+#	$OSversion=`/usr/bin/defaults read /System/Library/CoreServices/SystemVersion ProductVersion | /usr/bin/cut -d \. -f 2`;
+#	chomp $OSversion;
+# }
+# else {
+#	# adjust variable for new post Big Sur version numbering system, treat 11.0 as 10.16
+#	$OSversion=`/usr/bin/defaults read /System/Library/CoreServices/SystemVersion ProductVersion | /usr/bin/cut -d \. -f 2`;
+#	chomp $OSversion;
+#	$OSversion = $OSversion + 16;
+# }
 
-if ( $OSversion < $OSmin ) {
-	print $log "Your operating system version is too low, update to MacOS 10.7 or higher.\n";
-	close($log);
-	die;
-}
-else {
-	print $log "Passed minimum MacOS version check.\n";
-	print $log "Max MacOS check not run. New versions of MacOS may not be tested. Proceed with caution!\n\n";
-}
+# if ( $OSversion < $OSmin ) {
+#	print $log "Your operating system version is too low, update to MacOS 10.7 or higher.\n";
+#	close($log);
+#	die;
+# }
+# else {
+#	print $log "Passed minimum MacOS version check.\n";
+#	print $log "Max MacOS check not run. New versions of MacOS may not be tested. Proceed with caution!\n\n";
+# }
 
 	#Check for Pharos Popup and Xerox Printer software
 	
